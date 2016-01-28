@@ -4,30 +4,30 @@
 # Check to see if there's an SSH agent running with keys.
 `ssh-add -l`
 
-if not $?.success?
+unless $?.success?
   puts 'Your SSH does not currently contain any keys (or is stopped.)'
   puts 'Please start it and add your SSH key (OSX: ssh-add) to continue.'
   exit 1
 end
 
-sysmem = `sysctl -n hw.memsize`.to_i / 1024 / 1024
-humanReadableSystemMemory = sysmem / 1024
-puts 'system memory is ' + humanReadableSystemMemory.to_s + "GB"
+systemMemory = `sysctl -n hw.memsize`.to_i / 1024 / 1024
+humanReadableSystemMemory = systemMemory / 1024
+puts 'system memory is ' + humanReadableSystemMemory.to_s + 'GB'
 
-if sysmem < 2048
+if systemMemory < 2048
   puts 'This Vagrant environment requires a minimum memory of 2GB'
   exit 1
 end
 
-unless Vagrant.has_plugin?("vagrant-host-shell")
+unless Vagrant.has_plugin?('vagrant-host-shell')
   puts "This Vagrant environment requires the 'vagrant-host-shell' plugin."
-  puts "Please run `vagrant plugin install vagrant-host-shell` and then run this command again."
+  puts 'Please run `vagrant plugin install vagrant-host-shell` and then run this command again.'
   exit 1
 end
 
-unless Vagrant.has_plugin?("landrush")
+unless Vagrant.has_plugin?('landrush')
   puts "This Vagrant environment requires the 'landrush' plugin."
-  puts "Please run `vagrant plugin install landrush` and then run this command again."
+  puts 'Please run `vagrant plugin install landrush` and then run this command again.'
   exit 1
 end
 
@@ -43,7 +43,7 @@ end
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 
-VAGRANTFILE_API_VERSION = "2"
+VAGRANTFILE_API_VERSION = '2'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # The most common configuration options are documented and commented below.
@@ -52,13 +52,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.provider "virtualbox"
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.provider 'virtualbox'
+  config.vm.box = 'ubuntu/trusty64'
   # @todo verify this is the latest box to download or don't use box_url setting
   #config.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64/versions/20150609.0.10/providers/virtualbox.box"
   # uncomment below for parallels;
   #config.vm.box_url = "https://atlas.hashicorp.com/parallels/boxes/ubuntu-14.04/versions/1.0.5/providers/parallels.box"
-  config.vm.provision :shell, path: "provision/bootstrap.sh"
+  config.vm.provision :shell, path: 'provision/bootstrap.sh'
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -69,9 +69,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # change the host ports if you're running more than 1 project at a time
-  config.vm.network "forwarded_port", guest: 80, host: 8080, auto_correct: true
-  config.vm.network "forwarded_port", guest: 443, host: 8443, auto_correct: true
-  config.vm.network "forwarded_port", guest: 3306, host: 33066, auto_correct: true
+  config.vm.network 'forwarded_port', guest: 80, host: 8080, auto_correct: true
+  config.vm.network 'forwarded_port', guest: 443, host: 8443, auto_correct: true
+  config.vm.network 'forwarded_port', guest: 3306, host: 33066, auto_correct: true
 
 
   # Create a private network, which allows host-only access to the machine
@@ -95,7 +95,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
   #, nfs: true for optional speed up?
   # change this to /var/www/{projectFolderName}.dev
-  config.vm.synced_folder ".", "/var/www/chancegarcia.dev"
+  config.vm.synced_folder '.', '/var/www/chancegarcia.dev', owner: 'www-data', group: 'www-data'
 
   # for github interaction using existing keys
   config.ssh.forward_agent = true
@@ -104,7 +104,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-   config.vm.provider "virtualbox" do |vb|
+   config.vm.provider 'virtualbox' do |vb|
   #   # Display the VirtualBox GUI when booting the machine
   #   vb.gui = true
   #

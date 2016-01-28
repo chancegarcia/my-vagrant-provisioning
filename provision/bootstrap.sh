@@ -256,6 +256,9 @@ mysql -u $MYSQL_DB_USER --password=$MYSQL_DB_PASSWORD -v < /var/www/chancegarcia
 service mysql restart;
 service apache2 restart;
 
+# allow vagrant user to work in adm,www-data groups
+usermod -aG www-data,adm vagrant
+
 # Mark setup as being complete.
 
 touch /etc/vagrant/.bootstrap-complete;
